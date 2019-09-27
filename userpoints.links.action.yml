@@ -1,0 +1,5 @@
+entity.userpoints_type.add_form:
+  route_name: entity.userpoints_type.add_form
+  title: 'Add User points type'
+  appears_on:
+    - entity.userpoints_type.collection

@@ -1,0 +1,13 @@
+administer userpoints:
+  title: 'Access Userpoints settings'
+  description: 'Allow to add, edit and delete point types.'
+  restrict access: TRUE
+manage all points:
+  title: 'Manage all point types'
+  description: 'Add, update and delete user points of all types'
+view all points:
+  title: 'View all point types'
+  description: 'See all point types of all users'
+
+permission_callbacks:
+  - \Drupal\userpoints\UserPointsPermissions::generatePermissions

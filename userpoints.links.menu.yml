@@ -1,0 +1,7 @@
+# User points type menu items definition
+entity.userpoints_type.collection:
+  title: 'User points types'
+  route_name: entity.userpoints_type.collection
+  description: 'List User points type (bundles)'
+  parent: system.admin_structure
+  weight: 99

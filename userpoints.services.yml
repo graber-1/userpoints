@@ -1,0 +1,9 @@
+services:
+  userpoints.points:
+    class: Drupal\userpoints\Service\UserPointsService
+    arguments: ['@entity_type.manager', '@event_dispatcher', '@current_user']
+  access_check.userpoints_tab:
+    class: Drupal\userpoints\Access\UserpointsTabAccess
+    tags:
+      - { name: access_check, applies_to: _access_userpoints_tab }
+    arguments: []

@@ -1,0 +1,12 @@
+entity.user.userpoints:
+  path: '/user/{user}/points'
+  defaults:
+    _title: 'Points'
+    _form: '\Drupal\userpoints\Form\UserpointsUserTabForm'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+  requirements:
+    _access_userpoints_tab: 'TRUE'
+    user: \d+

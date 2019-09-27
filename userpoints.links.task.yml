@@ -1,0 +1,27 @@
+# User points routing definition
+
+entity.userpoints.canonical:
+  route_name: entity.userpoints.canonical
+  base_route: entity.userpoints.canonical
+  title: 'View'
+
+entity.userpoints.edit_form:
+  route_name: entity.userpoints.edit_form
+  base_route: entity.userpoints.canonical
+  title: 'Edit'
+
+entity.userpoints.version_history:
+  route_name: entity.userpoints.version_history
+  base_route: entity.userpoints.canonical
+  title: 'Revisions'
+
+entity.userpoints.delete_form:
+  route_name:  entity.userpoints.delete_form
+  base_route:  entity.userpoints.canonical
+  title: Delete
+  weight: 10
+
+entity.user.userpoints:
+  title: 'Points'
+  route_name: entity.user.userpoints
+  base_route: entity.user.canonical
