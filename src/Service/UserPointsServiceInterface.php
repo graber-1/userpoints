@@ -54,14 +54,14 @@ interface UserPointsServiceInterface {
    *
    * @param int|float $quantity
    *   The number of points (can be negative to subtract).
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to check.
    * @param string $points_type
    *   Type of points to add.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
    * @param string $log
    *   Revision log messsage for the operation.
    */
-  public function addPoints($quantity, EntityInterface $entity, $points_type, $log = '');
+  public function addPoints($quantity, $points_type, EntityInterface $entity, $log = '');
 
   /**
    * Transfer points from one entity to the other.

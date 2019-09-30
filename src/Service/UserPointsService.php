@@ -4,6 +4,7 @@ namespace Drupal\userpoints\Service;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -26,6 +27,13 @@ class UserPointsService implements UserPointsServiceInterface {
   protected $userPointsStorage;
 
   /**
+   * Userpoints bundles.
+   *
+   * @var array
+   */
+  protected $bundles;
+
+  /**
    * The Event Dispatcher service.
    *
    * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -44,6 +52,8 @@ class UserPointsService implements UserPointsServiceInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The config factory service.
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
+   *   The bundle info service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The Event Dispatcher service.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
@@ -51,10 +61,12 @@ class UserPointsService implements UserPointsServiceInterface {
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
+    EntityTypeBundleInfoInterface $bundleInfo,
     EventDispatcherInterface $eventDispatcher,
     AccountInterface $currentUser
   ) {
     $this->userPointsStorage = $entityTypeManager->getStorage('userpoints');
+    $this->bundles = $bundleInfo->getBundleInfo('userpoints');
     $this->eventDispatcher = $eventDispatcher;
     $this->currentUser = $currentUser;
   }
@@ -63,6 +75,11 @@ class UserPointsService implements UserPointsServiceInterface {
    * {@inheritdoc}
    */
   public function getPointsEntity(EntityInterface $entity, $points_type) {
+    // Validate type.
+    if (!isset($this->bundles[$points_type])) {
+      throw new UserPointsException("Userpoints type '$points_type' doesn't exist.");
+    }
+
     $query = $this->userPointsStorage->getQuery()
       ->condition('type', $points_type)
       ->condition('entity_type_id', $entity->getEntityTypeId(), '=')
@@ -105,7 +122,7 @@ class UserPointsService implements UserPointsServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function addPoints($quantity, EntityInterface $entity, $points_type, $log = '') {
+  public function addPoints($quantity, $points_type, EntityInterface $entity, $log = '') {
     $points = $this->getPointsEntity($entity, $points_type);
 
     if (empty($log)) {

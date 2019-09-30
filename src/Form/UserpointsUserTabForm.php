@@ -265,8 +265,8 @@ class UserpointsUserTabForm extends FormBase {
     $user = $form_state->getBuildInfo()['args'][0];
     $this->userpointsService->addPoints(
       $values['quantity'],
-      $user,
       $values['type'],
+      $user,
       $values['log']
     );
 

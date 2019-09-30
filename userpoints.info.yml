@@ -2,6 +2,3 @@ name: Userpoints
 description: I really don't feel like writing the description.
 core: 8.x
 type: module
-
-dependencies:
-  - drupal:inline_entity_form
