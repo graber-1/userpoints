@@ -1,9 +1,10 @@
 <?php
 
-namespace Drupal\booking_api\Plugin\rest\resource;
+namespace Drupal\userpoints\Plugin\rest\resource;
 
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\rest\ResourceResponse;
 use Drupal\rest\ModifiedResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -31,7 +32,7 @@ class UserpointsRestResource extends ResourceBase {
   // Method-specific required parameters.
   const REQUIRED_PARAMS = [
     'add' => ['quantity'],
-    'transfer' => ['quantity', 'target_entity_type_id', 'target_entity_id'],
+    'transfer' => ['quantity', 'target_entity_id'],
   ];
 
   /**
@@ -133,11 +134,21 @@ class UserpointsRestResource extends ResourceBase {
       throw new BadRequestHttpException('Operation "op" parameter needs to be specified.');
     }
 
-    if (method_exists($this, $data['op'])) {
+    $method = $data['op'] . 'Operation';
+    if (method_exists($this, $method)) {
+      // Merge in defaults.
+      $data += [
+        'entity_type_id' => 'user',
+        'target_entity_type_id' => 'user',
+      ];
+
       $this->checkAccess($data);
       $this->validateInput($data);
-      $method = $data['op'] . 'Operation';
-      return $this->{$method}($data);
+      $output = $this->{$method}($data);
+      if (in_array($data['op'], ['add', 'transfer'], TRUE)) {
+        return new ModifiedResourceResponse($output);
+      }
+      return new ResourceResponse($output);
     }
     else {
       throw new BadRequestHttpException('Invalid operation specified in "op" parameter.');
@@ -151,14 +162,14 @@ class UserpointsRestResource extends ResourceBase {
    *   The request data.
    */
   protected function validateInput(array &$data) {
-    $required = ['entity_type_id', 'entity_id', 'type'] + $method_required;
+    $required = ['entity_id', 'type'];
     if (array_key_exists($data['op'], self::REQUIRED_PARAMS)) {
       $required += self::REQUIRED_PARAMS[$data['op']];
     }
 
     $missing = [];
     foreach ($required as $param) {
-      if (!isset($data['param'])) {
+      if (!isset($data[$param])) {
         $missing[] = $param;
       }
     }
@@ -231,7 +242,7 @@ class UserpointsRestResource extends ResourceBase {
                 }
               }
               catch (Exception $e) {
-                // Just do nothing.
+                // Just do nothing, access will not be granted.
               }
             }
           }

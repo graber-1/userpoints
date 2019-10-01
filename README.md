@@ -25,10 +25,10 @@ with the following parameters:
 
 * op: operation, one of (add, transfer, getQuantity, getLog),
 * type: userpoints type machine ID,
-* entity_type_id: the entity type ID of the entity in question,
+* entity_type_id: (optional, default: user) the entity type ID of the entity in question,
 * entity_id: the entity ID of the entity in question,
 * quantity: (used for add and transfer operations) the quantity to add or transfer,
-* target_entity_type_id: (used for transfer operation) the entity type ID of the receiving entity,
+* target_entity_type_id: (used for transfer operation, optional, default: user) the entity type ID of the receiving entity,
 * target_entity_id: (used for transfer operation) the entity ID of the receiving entity,
 * log: (optional, used for add and transfer operations) revision log message for the operation.
 
