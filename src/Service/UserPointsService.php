@@ -155,9 +155,17 @@ class UserPointsService implements UserPointsServiceInterface {
       }
     }
 
+    $points->setNewRevision();
+
+    // Allow other modules to interact.
+    $event = new Event();
+    $event->points = $points;
+    $event->quantity = &$quantity;
+    $event->log = &$log;
+    $this->eventDispatcher->dispatch('userpoints.add', $event);
+
     if ($quantity) {
       $points->addPoints($quantity);
-      $points->setNewRevision();
       $points->setRevisionLogMessage($log);
       $points->save();
     }
@@ -191,21 +199,23 @@ class UserPointsService implements UserPointsServiceInterface {
     }
 
     $target_points = $this->getPointsEntity($target, $points_type);
+
     $target_points->setNewRevision();
+    $source_points->setNewRevision();
+
+    // Allow other modules to interact.
+    $event = new Event();
+    $event->sourcePoints = $source_points;
+    $event->targetPoints = $target_points;
+    $event->quantity = &$quantity;
+    $event->log = &$log;
+    $this->eventDispatcher->dispatch('userpoints.transfer', $event);
 
     $target_points->addPoints($quantity);
     $target_points->setRevisionLogMessage($log);
 
-    $source_points->setNewRevision();
-    $source_points->setRevisionLogMessage($log);
     $source_points->addPoints(-$quantity);
-
-    // Allow other modules to interact.
-    $event = new Event();
-    $event->sourcePoints = $source;
-    $event->targetPoints = $target;
-    $event->quantity = $quantity;
-    $this->eventDispatcher->dispatch('userpoints.transfer', $event);
+    $source_points->setRevisionLogMessage($log);
 
     $source_points->save();
     $target_points->save();
