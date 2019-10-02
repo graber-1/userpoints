@@ -277,7 +277,7 @@ class UserpointsUserTabForm extends FormBase {
     }
     else {
       $this->messenger()->addStatus($this->t('@count points subtracted.', [
-        '@count' => $values['quantity'],
+        '@count' => -$values['quantity'],
       ]));
     }
   }
