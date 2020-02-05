@@ -2,8 +2,13 @@ services:
   userpoints.points:
     class: Drupal\userpoints\Service\UserPointsService
     arguments: ['@entity_type.manager', '@entity_type.bundle.info', '@event_dispatcher', '@current_user']
-  access_check.userpoints_tab:
-    class: Drupal\userpoints\Access\UserpointsTabAccess
+  access_check.user.points_tab:
+    class: Drupal\userpoints\Access\UserpointsUserTabAccess
     tags:
-      - { name: access_check, applies_to: _access_userpoints_tab }
+      - { name: access_check, applies_to: _access_user_points_tab }
+    arguments: []
+  access_check.node.points_tab:
+    class: Drupal\userpoints\Access\UserpointsNodeTabAccess
+    tags:
+      - { name: access_check, applies_to: _access_node_points_tab }
     arguments: []

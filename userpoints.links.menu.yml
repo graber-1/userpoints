@@ -1,7 +1,18 @@
 # User points type menu items definition
+userpoints.admin:
+  title: 'Userpoints'
+  description: 'Configure Userpoints'
+  route_name: userpoints.admin
+  parent: system.admin_structure
+
+userpoints.admin.settings:
+  title: 'Settings'
+  description: 'Configure Userpoints'
+  route_name: userpoints.admin.settings
+  parent: userpoints.admin
+
 entity.userpoints_type.collection:
-  title: 'User points types'
+  title: 'Points types'
   route_name: entity.userpoints_type.collection
   description: 'List User points type (bundles)'
-  parent: system.admin_structure
-  weight: 99
+  parent: userpoints.admin

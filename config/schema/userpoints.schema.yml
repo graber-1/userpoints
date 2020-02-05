@@ -1,0 +1,6 @@
+userpoints.settings:
+  type: config_object
+  mapping:
+    userpoints_ui_bundles:
+      type: sequence
+      label: 'Entity bundles that have userpoints UI tab enabled'

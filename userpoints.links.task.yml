@@ -21,7 +21,6 @@ entity.userpoints.delete_form:
   title: Delete
   weight: 10
 
-entity.user.userpoints:
-  title: 'Points'
-  route_name: entity.user.userpoints
-  base_route: entity.user.canonical
+userpoints.local_tasks:
+  class: Drupal\Core\Menu\LocalTaskDefault
+  deriver: \Drupal\userpoints\Plugin\Derivative\DynamicLocalTasks

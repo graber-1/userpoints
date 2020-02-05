@@ -1,12 +1,18 @@
-entity.user.userpoints:
-  path: '/user/{user}/points'
+userpoints.admin:
+  path: '/admin/structure/userpoints'
   defaults:
-    _title: 'Points'
-    _form: '\Drupal\userpoints\Form\UserpointsUserTabForm'
-  options:
-    parameters:
-      user:
-        type: 'entity:user'
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Userpoints'
   requirements:
-    _access_userpoints_tab: 'TRUE'
-    user: \d+
+    _permission: 'administer userpoints'
+
+userpoints.admin.settings:
+  path: '/admin/structure/userpoints/settings'
+  defaults:
+    _form: '\Drupal\userpoints\Form\UserPointsSettingsForm'
+    _title: 'Settings'
+  requirements:
+    _permission: 'administer userpoints'
+
+route_callbacks:
+  - '\Drupal\userpoints\Routing\UserpointsRoutes::routes'
